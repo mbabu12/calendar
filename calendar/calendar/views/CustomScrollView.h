@@ -1,5 +1,5 @@
 //
-//  SideCellData.h
+//  CustomScrollView.h
 //  calendar
 //
 //  Created by NextepMac on 12/23/14.
@@ -7,10 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface SideCellData : NSObject
 
-@property (strong, nonatomic) NSString *image;
-@property (strong, nonatomic) NSString *text;
+@interface CustomScrollView : UIView
 
 @end

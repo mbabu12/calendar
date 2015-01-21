@@ -10,10 +10,16 @@
 #import <UIKit/UIKit.h>
 #import "JTCalendar.h"
 
-@interface CalendarViewController : UIViewController<JTCalendarDataSource>
+@interface CalendarViewController : UIViewController<JTCalendarDataSource, UITableViewDataSource, UITableViewDelegate>{
+    NSMutableArray * arr;
+    NSMutableArray * headers;
+    NSMutableArray * data;
+}
 @property (weak, nonatomic) IBOutlet JTCalendarMenuView *menu;
 @property (weak, nonatomic) IBOutlet JTCalendarContentView *content;
 @property (strong, nonatomic) JTCalendar *calendar;
 @property (weak, nonatomic) IBOutlet UIButton *buttonSideBar;
+@property (weak, nonatomic) IBOutlet UIImageView *top;
+@property (weak, nonatomic) IBOutlet UITableView *table;
 
 @end

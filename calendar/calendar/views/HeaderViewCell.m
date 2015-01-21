@@ -10,4 +10,10 @@
 
 @implementation HeaderViewCell
 
+@synthesize title;
+
+-(void)setCellData:(NSString *)titles{
+    [self.title setText:titles];
+}
+
 @end

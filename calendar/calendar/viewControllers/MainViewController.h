@@ -7,13 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "DayData.h"
+#import "BaseViewController.h"
 
-@interface MainViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>{
-    NSMutableArray * arr;
-}
-
-@property (weak, nonatomic) IBOutlet UITableView *table;
-@property (weak, nonatomic) IBOutlet UIButton *sidebarButton;
-
+@interface MainViewController : BaseViewController
+   
+    
 @end
 

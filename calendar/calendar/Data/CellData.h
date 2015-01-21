@@ -10,4 +10,8 @@
 
 @interface CellData : NSObject
 
+@property (strong, nonatomic) NSString *number;
+@property (strong, nonatomic) NSString *title;
+@property (strong, nonatomic) NSString *day;
+
 @end

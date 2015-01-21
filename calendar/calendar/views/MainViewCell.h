@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "CellData.h"
 
-@interface MainViewCell : NSObject
+@interface MainViewCell : UITableViewCell
+
+
+-(void)setCellData:(CellData *)Data;
+@property (weak, nonatomic) IBOutlet UILabel *number;
+@property (weak, nonatomic) IBOutlet UILabel *day;
+@property (weak, nonatomic) IBOutlet UILabel *title;
 
 @end

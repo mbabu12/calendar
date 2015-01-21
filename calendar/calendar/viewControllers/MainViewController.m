@@ -11,6 +11,7 @@
 #import "HeaderViewCell.h"
 #import "CellData.h"
 #import "SWRevealViewController.h"
+#import "DayViewController.h"
 
 
 @interface MainViewController ()
@@ -18,70 +19,26 @@
 @end
 
 @implementation MainViewController
-@synthesize table, sidebarButton;
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    arr = [[NSMutableArray alloc] init];
     
-    self.table.delegate = self;
-    self.table.dataSource = self;
-    [self.sidebarButton addTarget:self.revealViewController action:@selector(revealToggle:) forControlEvents:UIControlEventTouchUpInside];
-    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+}
+
+
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender
+{
+    if ([[segue identifier] isEqualToString:@"view_day"])
+    {
+        DayViewController * controller = [segue destinationViewController];
+        controller.currentData = self.currentData;
     }
+}
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
-    return 32;
+-(IBAction)prepareForUnwind:(UIStoryboardSegue *)segue {
 }
 
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    return 45;
-}
-
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return [arr count]/10;
-}
-
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
-    return 10;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
-    static NSString *simpleTableIdentifier = @"HeaderViewCell";
-    HeaderViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-    
-    return cell;
-}
-
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
-{
-        static NSString *simpleTableIdentifier = @"MainViewCell";
-        MainViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
-        
-        CellData *data = [arr objectAtIndex:indexPath.row];
-        
-        [cell setCellData:data];
-        return cell;
-}
-
--(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-  
-}
-
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 
 

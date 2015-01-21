@@ -10,4 +10,13 @@
 
 @implementation MainViewCell
 
+@synthesize number, title, day;
+
+-(void)setCellData:(CellData *)Data{
+    [self.number setText:Data.number];
+    [self.title setText:Data.title];
+    [self.day setText:Data.day];
+}
+
+
 @end

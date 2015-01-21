@@ -7,7 +7,15 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
+#import "SideCellData.h"
 
-@interface SideViewCell : NSObject
+@interface SideViewCell : UITableViewCell
+@property (weak, nonatomic) IBOutlet UILabel *text;
+@property (weak, nonatomic) IBOutlet UIImageView *image;
+@property (weak, nonatomic) IBOutlet UISwitch * switchDays;
+
+-(void)setCellData:(SideCellData *)Data;
+-(void)setFormats;
 
 @end

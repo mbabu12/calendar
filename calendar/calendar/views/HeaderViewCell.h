@@ -7,7 +7,11 @@
 //
 
 #import <Foundation/Foundation.h>
+#import <UIKit/UIKit.h>
 
-@interface HeaderViewCell : NSObject
+@interface HeaderViewCell : UITableViewHeaderFooterView
+@property (weak, nonatomic) IBOutlet UILabel *title;
+
+-(void)setCellData:(NSString *)titles;
 
 @end

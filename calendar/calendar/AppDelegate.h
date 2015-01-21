@@ -7,11 +7,20 @@
 //
 
 #import <UIKit/UIKit.h>
+#import <FacebookSDK/FacebookSDK.h>
 
-@interface AppDelegate : UIResponder <UIApplicationDelegate>
+
+
+@interface AppDelegate : UIResponder <UIApplicationDelegate>{
+    @public
+    NSString * imageUrl;
+    NSString * name;
+    bool isOpened;
+}
+
 
 @property (strong, nonatomic) UIWindow *window;
-
+- (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error;
 
 @end
 

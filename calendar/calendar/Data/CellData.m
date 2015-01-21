@@ -10,4 +10,6 @@
 
 @implementation CellData
 
+@synthesize number, title, day;
+
 @end
