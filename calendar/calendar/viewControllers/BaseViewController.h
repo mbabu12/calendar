@@ -10,7 +10,9 @@
 #import "DayData.h"
 
 @interface BaseViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>{
-    NSMutableArray * arr;
+    NSMutableArray * arrDays;
+    NSMutableArray * arrMonth;
+    int sectionNumber;
     
 }
 
@@ -26,6 +28,7 @@
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *gesture;
 
 @property (nonatomic, readwrite, retain) DayData * currentData;
+
 
 -(void)setValues;
 @end

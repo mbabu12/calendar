@@ -11,7 +11,9 @@
 @interface CellData : NSObject
 
 @property (strong, nonatomic) NSString *number;
-@property (strong, nonatomic) NSString *title;
 @property (strong, nonatomic) NSString *day;
+@property (strong, nonatomic) NSString *month;
+@property (assign, nonatomic) BOOL isWork;
+@property (strong, nonatomic) NSMutableArray * events;
 
 @end

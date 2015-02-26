@@ -32,6 +32,8 @@
     {
         DayViewController * controller = [segue destinationViewController];
         controller.currentData = self.currentData;
+        controller.allDays = arrDays;
+        controller.allMonth = arrMonth;
     }
 }
 

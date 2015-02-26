@@ -10,11 +10,21 @@
 #import <UIKit/UIKit.h>
 #import "JTCalendar.h"
 
+@class CalendarViewController;
+
+@protocol CalendarViewControllerDelegate <NSObject>
+
+- (void)changeItem:(CalendarViewController *)controller;
+
+@end
+
 @interface CalendarViewController : UIViewController<JTCalendarDataSource, UITableViewDataSource, UITableViewDelegate>{
     NSMutableArray * arr;
     NSMutableArray * headers;
     NSMutableArray * data;
 }
+
+@property (nonatomic, weak) id <CalendarViewControllerDelegate> delegate;
 @property (weak, nonatomic) IBOutlet JTCalendarMenuView *menu;
 @property (weak, nonatomic) IBOutlet JTCalendarContentView *content;
 @property (strong, nonatomic) JTCalendar *calendar;

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14B25" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="6250" systemVersion="14C109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="6244"/>
@@ -16,7 +16,8 @@
                     <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="მარტი" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PdT-It-yrA">
                         <rect key="frame" x="0.0" y="4" width="320" height="21"/>
                         <constraints>
-                            <constraint firstAttribute="width" constant="320" id="G2h-0r-uO4"/>
+                            <constraint firstAttribute="width" constant="320" id="98e-XT-qD2"/>
+                            <constraint firstAttribute="width" relation="lessThanOrEqual" constant="800" id="G2h-0r-uO4"/>
                             <constraint firstAttribute="width" constant="320" id="iQ7-mr-Loz"/>
                             <constraint firstAttribute="height" constant="21" id="nrb-kF-MKN"/>
                         </constraints>
@@ -25,6 +26,7 @@
                         <nil key="highlightedColor"/>
                         <variation key="default">
                             <mask key="constraints">
+                                <exclude reference="G2h-0r-uO4"/>
                                 <exclude reference="iQ7-mr-Loz"/>
                             </mask>
                         </variation>
@@ -32,13 +34,19 @@
                 </subviews>
                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                 <constraints>
+                    <constraint firstAttribute="trailing" secondItem="PdT-It-yrA" secondAttribute="trailing" id="0rT-kb-o0c"/>
                     <constraint firstAttribute="centerX" secondItem="PdT-It-yrA" secondAttribute="centerX" id="93g-kb-GMK"/>
                     <constraint firstAttribute="centerY" secondItem="PdT-It-yrA" secondAttribute="centerY" id="FT0-BF-Xf1"/>
+                    <constraint firstItem="PdT-It-yrA" firstAttribute="leading" secondItem="b2T-HW-dS8" secondAttribute="leading" id="Gfp-JZ-5N0"/>
                     <constraint firstAttribute="centerY" secondItem="PdT-It-yrA" secondAttribute="centerY" id="Hgc-13-TKE"/>
+                    <constraint firstAttribute="centerX" secondItem="PdT-It-yrA" secondAttribute="centerX" id="MaL-ao-IGP"/>
                     <constraint firstAttribute="centerX" secondItem="PdT-It-yrA" secondAttribute="centerX" id="wOO-Zt-wMd"/>
                 </constraints>
                 <variation key="default">
                     <mask key="constraints">
+                        <exclude reference="0rT-kb-o0c"/>
+                        <exclude reference="93g-kb-GMK"/>
+                        <exclude reference="Gfp-JZ-5N0"/>
                         <exclude reference="Hgc-13-TKE"/>
                         <exclude reference="wOO-Zt-wMd"/>
                     </mask>
@@ -47,6 +55,7 @@
             <connections>
                 <outlet property="title" destination="PdT-It-yrA" id="dgu-Q3-iur"/>
             </connections>
+            <point key="canvasLocation" x="467" y="387"/>
         </tableViewCell>
     </objects>
 </document>

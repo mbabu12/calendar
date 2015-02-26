@@ -12,8 +12,9 @@
 #import "DescriptionViewCell.h"
 
 
+
 @implementation CalendarViewController
-@synthesize menu, content, calendar, buttonSideBar, top, table;
+@synthesize menu, content, calendar, buttonSideBar, top, table, delegate;
 
 - (void)viewDidLoad
 
@@ -65,9 +66,8 @@
     [self.content removeFromSuperview];
     [self.menu removeFromSuperview];
     self.calendar = nil;
-    
+    [self.delegate changeItem:self];
 }
-
 
 
 - (BOOL)calendarHaveEvent:(JTCalendar *)calendar date:(NSDate *)date

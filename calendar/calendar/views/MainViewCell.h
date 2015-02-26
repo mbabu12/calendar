@@ -14,8 +14,10 @@
 
 
 -(void)setCellData:(CellData *)Data;
+
 @property (weak, nonatomic) IBOutlet UILabel *number;
 @property (weak, nonatomic) IBOutlet UILabel *day;
 @property (weak, nonatomic) IBOutlet UILabel *title;
+@property (strong, nonatomic) NSString * month;
 
 @end
