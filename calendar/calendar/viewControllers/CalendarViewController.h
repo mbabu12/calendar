@@ -10,6 +10,7 @@
 #import <UIKit/UIKit.h>
 #import "JTCalendar.h"
 
+
 @class CalendarViewController;
 
 @protocol CalendarViewControllerDelegate <NSObject>
@@ -22,6 +23,8 @@
     NSMutableArray * arr;
     NSMutableArray * headers;
     NSMutableArray * data;
+    NSMutableArray * textViews;
+
 }
 
 @property (nonatomic, weak) id <CalendarViewControllerDelegate> delegate;
@@ -31,5 +34,9 @@
 @property (weak, nonatomic) IBOutlet UIButton *buttonSideBar;
 @property (weak, nonatomic) IBOutlet UIImageView *top;
 @property (weak, nonatomic) IBOutlet UITableView *table;
+
+@property (strong, nonatomic) NSMutableArray * allDays;
+@property (strong, nonatomic) NSMutableArray * allMonth;
+-(void)enableViewContent:(BOOL)enable;
 
 @end

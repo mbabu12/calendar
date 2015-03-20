@@ -13,9 +13,10 @@
 #import "EventData.h"
 
 
-@interface DayViewController : BaseViewController<CalendarViewControllerDelegate>{
+@interface DayViewController : BaseViewController<CalendarViewControllerDelegate, UITableViewDataSource, UITableViewDelegate>{
     @public
         BOOL show;
+    NSMutableArray * textViews;
 }
 
 @property (weak, nonatomic) IBOutlet UIImageView *topColor;
@@ -37,5 +38,8 @@
 @property (strong, nonatomic) NSMutableArray * allEvents;
 
 @property (weak, nonatomic) IBOutlet UITableView *eventTable;
+@property (weak, nonatomic) IBOutlet UILabel *defTitle;
+@property (weak, nonatomic) IBOutlet UILabel *defText;
+@property (weak, nonatomic) IBOutlet UIButton *defButton;
 
 @end

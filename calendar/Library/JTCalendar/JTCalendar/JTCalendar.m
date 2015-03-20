@@ -80,7 +80,7 @@
     [self.menuMonthsView addSubview:button1];
     
     UIButton * button2 = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-    button2.frame = CGRectMake(pageWidth * 3 - 12, 18, 8, 14);
+    button2.frame = CGRectMake(pageWidth * 3 - 20, 18, 8, 14);
     [button2 addTarget:self action:@selector(loadNextMonth) forControlEvents:UIControlEventTouchUpInside];
     [button2 setBackgroundImage:[UIImage imageNamed:@"arrow3.png"] forState:UIControlStateNormal];
     [self.menuMonthsView addSubview:button2];
@@ -90,6 +90,11 @@
     self.menuMonthsView.contentOffset = CGPointMake(menuPageWidth * ((NUMBER_PAGES_LOADED / 2)), self.menuMonthsView.contentOffset.y);
     
     [self.contentView reloadData];
+}
+
+-(void)enableViewContent:(BOOL)enable{
+    self.menuMonthsView.userInteractionEnabled = enable;
+    self.contentView.userInteractionEnabled = enable;
 }
 
 - (void)reloadAppearance

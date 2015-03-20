@@ -34,6 +34,7 @@
 - (void)loadNextMonth;
 
 -(void)clearAll;
+-(void)enableViewContent:(BOOL)enable;
 
 @end
 

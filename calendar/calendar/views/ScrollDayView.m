@@ -32,14 +32,14 @@
     arrDays = [[NSMutableArray alloc] init];
 
     
-    UISwipeGestureRecognizer * swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeleft:)];
-    swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
-    [self addGestureRecognizer:swipeleft];
+    self.swipeleft=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swipeleft:)];
+    self.swipeleft.direction=UISwipeGestureRecognizerDirectionLeft;
+    [self addGestureRecognizer:self.swipeleft];
    
     
-    UISwipeGestureRecognizer * swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swiperight:)];
-    swiperight.direction=UISwipeGestureRecognizerDirectionRight;
-    [self addGestureRecognizer:swiperight];
+    self.swiperight=[[UISwipeGestureRecognizer alloc]initWithTarget:self action:@selector(swiperight:)];
+    self.swiperight.direction=UISwipeGestureRecognizerDirectionRight;
+    [self addGestureRecognizer:self.swiperight];
     
 }
 
@@ -59,6 +59,11 @@
         [self myInitialization];
     }
     return self;
+}
+
+- (void)enableScroll:(BOOL)enable{
+    self.swipeleft.enabled = enable;
+    self.swiperight.enabled = enable;
 }
 
 - (void)startDate:(DayData *)data{
@@ -318,7 +323,7 @@
         UILabel * monthLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, widthBig - 25, widthBig, 20)];
    
         monthLabel.alpha = 0;
-        [monthLabel setFont:[UIFont systemFontOfSize:14]];
+        [monthLabel setFont:[UIFont fontWithName:@"BPGNinoMtavruli-Bold" size:14.0]];
         day.layer.anchorPoint = CGPointMake(0.5, 0.5);
         day.frame = CGRectMake((x + width) * i  - width, bigY, widthBig, widthBig);
         [label setFont:[UIFont systemFontOfSize:40]];

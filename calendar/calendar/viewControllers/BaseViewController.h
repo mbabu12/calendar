@@ -9,27 +9,17 @@
 #import <UIKit/UIKit.h>
 #import "DayData.h"
 
-@interface BaseViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>{
-    NSMutableArray * arrDays;
-    NSMutableArray * arrMonth;
-    int sectionNumber;
+@interface BaseViewController : UIViewController{
+  
     
 }
 
-@property (weak, nonatomic) IBOutlet UITableView *table;
-@property (weak, nonatomic) IBOutlet UIButton *sidebarButton;
-@property (weak, nonatomic) IBOutlet UIImageView *topColor;
-@property (weak, nonatomic) IBOutlet UIImageView *back;
-@property (weak, nonatomic) IBOutlet UIImageView *dayBox;
-@property (weak, nonatomic) IBOutlet UILabel *topDate;
-@property (weak, nonatomic) IBOutlet UILabel *month;
-@property (weak, nonatomic) IBOutlet UIButton *calendar;
-@property (weak, nonatomic) IBOutlet UILabel *dayTitle;
 @property (strong, nonatomic) IBOutlet UITapGestureRecognizer *gesture;
-
+@property (weak, nonatomic) IBOutlet UIButton *sidebarButton;
+@property (weak, nonatomic) IBOutlet UITableView *table;
 @property (nonatomic, readwrite, retain) DayData * currentData;
 
+-(void)enableViewContent:(BOOL)enable;
 
--(void)setValues;
 @end
 

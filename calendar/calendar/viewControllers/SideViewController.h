@@ -14,9 +14,10 @@
 
 
 @interface SideViewController : UIViewController<UITableViewDelegate, UITableViewDataSource>{
-    NSMutableArray * arr1;
-    NSMutableArray * arr2;
+    NSMutableArray * arrCat;
     NSMutableArray * headerArr;
+    NSMutableArray * showCat;
+    NSString * notificationOn;
 }
 
 
@@ -26,6 +27,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
 
+@property (strong, nonatomic) NSDictionary * parsedObject;
 
 
 @end

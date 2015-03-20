@@ -27,6 +27,8 @@
 #import <QuartzCore/QuartzCore.h>
 
 #import "SWRevealViewController.h"
+#import "BaseViewController.h"
+#import "MainViewController.h"
 
 
 #pragma mark - StatusBar Helper Function
@@ -542,7 +544,7 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
 
 - (void)touchesMoved:(NSSet *)touches withEvent:(UIEvent *)event
 {
-    /*
+    
     [super touchesMoved:touches withEvent:event];
     
     if ( _dragging || self.state == UIGestureRecognizerStateFailed)
@@ -554,7 +556,8 @@ static CGFloat scaledValue( CGFloat v1, CGFloat min2, CGFloat max2, CGFloat min1
     CGPoint nowPoint = [touch locationInView:self.view];
     
     if (abs(nowPoint.x - _beginPoint.x) > kDirectionPanThreshold) _dragging = YES;
-    else if (abs(nowPoint.y - _beginPoint.y) > kDirectionPanThreshold) self.state = UIGestureRecognizerStateFailed; */
+    else if (abs(nowPoint.y - _beginPoint.y) > kDirectionPanThreshold) self.state = UIGestureRecognizerStateFailed;
+    
 }
 
 @end
@@ -1384,6 +1387,27 @@ const int FrontViewPositionNone = 0xff;
 // Primitive method for view controller deployment and animated layout to the given position.
 - (void)_setFrontViewPosition:(FrontViewPosition)newPosition withDuration:(NSTimeInterval)duration
 {
+
+//    NSLog(@"== %i", newPosition);
+    UINavigationController *nav = (UINavigationController*)self.frontViewController;
+    BaseViewController *baseViewController = (BaseViewController*)nav.topViewController;
+    
+    if (newPosition == 3)
+    {
+   //     if([baseViewController isKindOfClass:[MainViewController class]])
+   //         _panGestureRecognizer.enabled = YES;
+   //     else
+   //         _panGestureRecognizer.enabled = NO;
+        [baseViewController enableViewContent:YES];
+    }
+    else
+        if (newPosition == 2)
+        {
+    //        _panGestureRecognizer.enabled = YES;
+            [baseViewController enableViewContent:NO];
+        }
+    
+    
     void (^rearDeploymentCompletion)() = [self _rearViewDeploymentForNewFrontViewPosition:newPosition];
     void (^rightDeploymentCompletion)() = [self _rightViewDeploymentForNewFrontViewPosition:newPosition];
     void (^frontDeploymentCompletion)() = [self _frontViewDeploymentForNewFrontViewPosition:newPosition];

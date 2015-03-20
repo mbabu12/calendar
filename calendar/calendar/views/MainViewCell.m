@@ -13,7 +13,10 @@
 
 @synthesize number, title, day, month;
 
+
+
 -(void)setCellData:(CellData *)Data{
+    
     [self.number setText:Data.number];
     [self.title setText:((EventData *)[Data.events objectAtIndex:0]).name];
     [self.day setText:Data.day];

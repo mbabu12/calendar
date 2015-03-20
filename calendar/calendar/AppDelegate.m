@@ -7,13 +7,16 @@
 //
 
 #import "AppDelegate.h"
-
+#import "AppSettings.h"
+#import "CellData.h"
+#import "EventData.h"
 
 @interface AppDelegate ()
     
 @end
 
 @implementation AppDelegate
+
 
 
 +(void)downloadDataFromURL:(NSURL *)url withCompletionHandler:(void (^)(NSData *))completionHandler{
@@ -48,6 +51,7 @@
     
     // Resume the task.
     [task resume];
+ 
 }
 
 
@@ -152,9 +156,73 @@
     // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
 }
 
+-(NSString *)changeMonth:(NSString *)months{
+    if([months isEqual:@"იანვარი"]){
+        return @"1";
+    }
+    else if([months isEqual:@"თებერვალი"]){
+        return @"2";
+    }
+    else if([months isEqual:@"მარტი"]){
+        return @"3";
+    }
+    else if([months isEqual:@"აპრილი"]){
+        return @"4";
+    }
+    else if([months isEqual:@"მაისი"]){
+        return @"5";
+    }
+    else if([months isEqual:@"ივნისი"]){
+        return @"6";
+    }
+    else if([months isEqual:@"ივლისი"]){
+        return @"7";
+    }
+    else if([months isEqual:@"აგვისტო"]){
+        return @"8";
+    }
+    else if([months isEqual:@"სექტემბერი"]){
+        return @"9";
+    }
+    else if([months isEqual:@"ოქტომბერი"]){
+        return @"10";
+    }
+    else if([months isEqual:@"ნოემბერი"]){
+        return @"11";
+    }
+    else if([months isEqual:@"დეკემბერი"]){
+        return @"12";
+    }
+    return 0;
+}
+
 - (void)applicationDidEnterBackground:(UIApplication *)application {
     // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
     // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+    [self addNotifications];
+    
+}
+
+- (void)addNotifications{
+    AppSettings *appSettings = [AppSettings sharedInstance];
+    if(appSettings.array != nil){
+        for(int i = 0; i < [appSettings.array count]; i++){
+            CellData * temp = [appSettings.array objectAtIndex:i];
+            
+            NSString *dateString = [NSString stringWithFormat:@"%@-%@-2015 12:00", temp.number, [self changeMonth:temp.month]];
+            NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
+            [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm"];
+            NSDate *dateFromString = [[NSDate alloc] init];
+            dateFromString = [dateFormatter dateFromString:dateString];
+            
+            UILocalNotification* localNotification = [[UILocalNotification alloc] init];
+            localNotification.fireDate = dateFromString;
+            localNotification.alertBody = [NSString stringWithFormat:@"გილოცავთ! დღეს არის %@", ((EventData *)[temp.events objectAtIndex:0]).name];
+            localNotification.timeZone = [NSTimeZone defaultTimeZone];
+            [[UIApplication sharedApplication] scheduleLocalNotification: localNotification];
+        }
+    }
+
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application {
@@ -163,6 +231,7 @@
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+    [[UIApplication sharedApplication] cancelAllLocalNotifications];
     
     // Logs 'install' and 'app activate' App Events.
     [FBAppEvents activateApp];
@@ -174,6 +243,7 @@
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
+    [self addNotifications];
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
     [FBSession.activeSession close];
 }

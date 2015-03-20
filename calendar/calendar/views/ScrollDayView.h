@@ -24,7 +24,10 @@
 - (void)myInitialization;
 - (void)startDate:(DayData *)data;
 - (NSDate *)getCurDate;
+- (void)enableScroll:(BOOL)enable;
 
 @property (strong, nonatomic) NSDate * startData;
+@property (strong, nonatomic) UISwipeGestureRecognizer * swipeleft;
+@property (strong, nonatomic) UISwipeGestureRecognizer * swiperight;
 
 @end

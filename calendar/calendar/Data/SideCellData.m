@@ -9,7 +9,7 @@
 #import "SideCellData.h"
 
 @implementation SideCellData
-@synthesize image, text;
+@synthesize image, text, cId;
 
 
 @end

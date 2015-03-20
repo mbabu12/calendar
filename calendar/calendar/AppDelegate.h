@@ -23,7 +23,7 @@
 - (void)sessionStateChanged:(FBSession *)session state:(FBSessionState) state error:(NSError *)error;
 
 +(void)downloadDataFromURL:(NSURL *)url withCompletionHandler:(void(^)(NSData *data))completionHandler;
-
+-(NSString *)changeMonth:(NSString *)months;
 
 @end
 

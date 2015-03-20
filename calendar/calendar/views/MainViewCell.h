@@ -19,5 +19,6 @@
 @property (weak, nonatomic) IBOutlet UILabel *day;
 @property (weak, nonatomic) IBOutlet UILabel *title;
 @property (strong, nonatomic) NSString * month;
+@property (weak, nonatomic) IBOutlet UIView *circle;
 
 @end

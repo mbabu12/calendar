@@ -10,6 +10,7 @@
 #import "SideHeaderViewCell.h"
 #import "SideViewCell.h"
 #import "SideCellData.h"
+#import "Reachability.h"
 
 
 @implementation SideViewController
@@ -17,10 +18,31 @@
 
 - (void)viewDidLoad {
     [self.topView setBackgroundColor:[UIColor colorWithRed:25.0/255.0 green:25.0/255.0 blue:25.0/255.0 alpha:1]];
-    arr1 = [[NSMutableArray alloc] init];
-    arr2 = [[NSMutableArray alloc] init];
+    
+    NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+    showCat = [[NSMutableArray alloc] init];
+    if([defaults objectForKey:@"categories"] != nil){
+        showCat = [[defaults objectForKey:@"categories"] mutableCopy];
+    }
+    
+    if([defaults objectForKey:@"notification"] != nil)
+        notificationOn = [defaults objectForKey:@"notification"];
+    else
+        [defaults setObject:@"0" forKey:@"notification"];
+    
+    arrCat = [[NSMutableArray alloc] init];
     headerArr = [[NSMutableArray alloc] init];
-    [self setData];
+    
+    SideCellData * data = [SideCellData alloc];
+    data.text = @"რა ტიპის დღეები გამოჩნდეს";
+    data.image = @"calBlue.png";
+    [headerArr addObject:data];
+    
+    
+    
+    self.parsedObject = [[NSDictionary alloc] init];
+    self.parsedObject = [defaults objectForKey:@"allCat"];
+    [self parseData];
     
     self.table.delegate = self;
     self.table.dataSource = self;
@@ -36,6 +58,32 @@
 
     [self changePicture];
 }
+
+- (void)viewWillAppear:(BOOL)animated{
+  //  [self.revealViewController.frontViewController.view setUserInteractionEnabled:NO];
+}
+
+- (void)viewWillDisappear:(BOOL)animated{
+ //   [self.revealViewController.frontViewController.view setUserInteractionEnabled:YES];
+}
+
+
+
+- (void)parseData{
+    NSArray * categories = self.parsedObject[@"Data"];
+    for(int i = 0; i < [categories count]; i++){
+        NSDictionary * temp = [categories objectAtIndex:i];
+        SideCellData * data = [SideCellData alloc];
+        data.cId = temp[@"Id"];
+        data.text = temp[@"Name"];
+        data.image = temp[@"ImageId"];
+        [arrCat addObject:data];
+    }
+    
+    [table reloadData];
+
+}
+
 
 - (void) receiveTestNotification:(NSNotification *) notification
 {
@@ -58,26 +106,7 @@
     self.nameLabel.text = appDelegate -> name;
 }
 
-- (void)setData{
-    for(int i = 0; i < 2; i++){
-        SideCellData * data = [SideCellData alloc];
-        data.text = @"teqsti";
-        data.image = @"img.png";
-        [arr1 addObject:data];
-    }
-    for(int i = 0; i < 4; i++){
-        SideCellData * data = [SideCellData alloc];
-        data.text = @"teqsti";
-        data.image = @"img.png";
-        [arr2 addObject:data];
-    }
-    for(int i = 0; i < 2; i++){
-        SideCellData * data = [SideCellData alloc];
-        data.text = @"teqsti";
-        data.image = @"img.png";
-        [headerArr addObject:data];
-    }
-}
+ 
 - (IBAction)touch:(id)sender {
     if (FBSession.activeSession.state != FBSessionStateOpen
         & FBSession.activeSession.state != FBSessionStateOpenTokenExtended) {
@@ -108,7 +137,7 @@
 - (IBAction)buttonTouched:(id)sender
 {
     
-    }
+}
 
 
 
@@ -129,13 +158,15 @@
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section{
+    if(section == 0)
+        return 1;
     return 38;
 }
 
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    return 46;
+    return 56;
 }
 
 
@@ -146,33 +177,108 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if(section == 0)
-        return [arr1 count];
-    else
-        return [arr2 count];
+        return 1;
+    return [arrCat count];
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section{
+    if(section == 0)
+        return nil;
     static NSString *simpleTableIdentifier = @"SideHeaderViewCell";
     SideHeaderViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
-    SideCellData *data = [headerArr objectAtIndex:section];
+    SideCellData *data = [headerArr objectAtIndex:0];
     [cell setCellData:data];
     [cell setFormats];
     return cell;
 }
+
+- (void)changeSwitch:(id)sender{
+    int k = [sender tag];
+    NSString *idForCat = [NSString stringWithFormat:@"%d", k];
+    if([idForCat isEqual:@"0"]){
+        if([notificationOn isEqual:@"0"])
+            notificationOn = @"1";
+        else
+            notificationOn = @"0";
+        
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        [defaults setObject:notificationOn forKey:@"notification"];
+        [defaults synchronize];
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"changeNotification"
+         object:self];
+    }
+    else{
+        if([sender isOn]){
+            if(![showCat containsObject:idForCat]){
+                [showCat addObject:idForCat];
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:showCat forKey:@"categories"];
+                [defaults synchronize];
+            }
+        }
+        else{
+            if([showCat containsObject:idForCat]){
+                [showCat removeObject:idForCat];
+                NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+                [defaults setObject:showCat forKey:@"categories"];
+                [defaults synchronize];
+            }
+
+        }
+        [[NSNotificationCenter defaultCenter]
+         postNotificationName:@"changeCategory"
+         object:self];
+    }
+
+}
+
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *simpleTableIdentifier = @"SideViewCell";
     SideViewCell *cell = [tableView dequeueReusableCellWithIdentifier:simpleTableIdentifier];
     
-    SideCellData *data;
+    if(indexPath.section == 0){
+        [cell.text setText:@"შეგაწუხოთ?"];
+        [cell.image setImage:[UIImage imageNamed:@"img.png"]];
+        [cell.text setTextColor:[UIColor colorWithRed:209.0/255.0 green:209.0/255.0 blue:209.0/255.0 alpha:1]];
+        cell.backgroundColor = [UIColor colorWithRed:25.0/255.0 green:25.0/255.0 blue:25.0/255.0 alpha:1];
+        BOOL k = NO;
+        if([notificationOn isEqual:@"1"])
+            k = YES;
+        if(!k)
+            [cell.switchDays setOn:NO];
+        else
+            [cell.switchDays isOn];
+        cell.switchDays.tag = 0;
+        [cell.switchDays addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+
+        return cell;
+    }
     
-    if(indexPath.section == 0)
-        data = [arr1 objectAtIndex:indexPath.row];
-    else
-        data = [arr2 objectAtIndex:indexPath.row];
+    SideCellData *data = [arrCat objectAtIndex:indexPath.row];
+    if([data.text isEqualToString:@"სახელმწიფო"]){
+        [cell.switchDays isOn];
+        [cell.switchDays setUserInteractionEnabled:NO];
+    }
+    else{
+        BOOL isOn = NO;
+        for(int i = 0; i < [showCat count]; i++){
+            NSString * temp = [showCat objectAtIndex:i];
+            if([[NSString stringWithFormat:@"%d", [data.cId intValue]] isEqualToString:temp]){
+                [cell.switchDays isOn];
+                isOn = YES;
+            }
+        }
     
+        if(!isOn)
+            [cell.switchDays setOn:NO];
+        cell.switchDays.tag = [data.cId intValue];
+        [cell.switchDays addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
+    }
+        
     [cell setFormats];
     [cell setCellData:data];
     return cell;
