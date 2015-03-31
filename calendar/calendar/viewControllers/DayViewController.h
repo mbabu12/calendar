@@ -17,8 +17,10 @@
     @public
         BOOL show;
     NSMutableArray * textViews;
+    NSMutableArray * showCategories;
 }
 
+@property (weak, nonatomic) IBOutlet UIView *viewDay;
 @property (weak, nonatomic) IBOutlet UIImageView *topColor;
 @property (weak, nonatomic) IBOutlet UIImageView *back;
 @property (weak, nonatomic) IBOutlet UIButton *calendar;
@@ -26,6 +28,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *backMain;
 @property (strong, nonatomic) NSString * previous;
 
+@property (strong, nonatomic) NSDictionary * parsedObject;
 
 @property (strong, nonatomic) ScrollDayView * scrollDays;
 @property (strong, nonatomic) NSString * curDate;

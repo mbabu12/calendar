@@ -15,5 +15,6 @@
 @property (strong, nonatomic) NSString * image;
 @property (strong, nonatomic) NSString * name;
 @property (strong, nonatomic) NSString * eventDescription;
+@property (strong, nonatomic) NSString * priority;
 
 @end

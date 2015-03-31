@@ -26,6 +26,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *profileImage;
 @property (weak, nonatomic) IBOutlet UIButton *logoutButton;
 @property (weak, nonatomic) IBOutlet UILabel *nameLabel;
+@property (strong, nonatomic) NSString * startUrl;
 
 @property (strong, nonatomic) NSDictionary * parsedObject;
 

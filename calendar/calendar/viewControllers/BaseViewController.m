@@ -46,6 +46,7 @@
 -(void)enableViewContent:(BOOL)enable{
     [self.table setUserInteractionEnabled:enable];
     self.gesture.enabled = enable;
+    self.calendar.enabled = enable;
 }
 
 @end

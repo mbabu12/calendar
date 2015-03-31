@@ -24,6 +24,7 @@
     NSMutableArray * headers;
     NSMutableArray * data;
     NSMutableArray * textViews;
+    NSMutableArray * showCategories;
 
 }
 
@@ -37,6 +38,10 @@
 
 @property (strong, nonatomic) NSMutableArray * allDays;
 @property (strong, nonatomic) NSMutableArray * allMonth;
+
+@property (strong, nonatomic) NSDictionary * parsedObject;
+@property (strong, nonatomic) NSDate * lastDate;
+
 -(void)enableViewContent:(BOOL)enable;
 
 @end

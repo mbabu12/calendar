@@ -34,11 +34,11 @@
     headerArr = [[NSMutableArray alloc] init];
     
     SideCellData * data = [SideCellData alloc];
-    data.text = @"რა ტიპის დღეები გამოჩნდეს";
+    data.text = @"კატეგორიები";
     data.image = @"calBlue.png";
     [headerArr addObject:data];
     
-    
+    self.startUrl = @"http://nextep.ge/content/calendar/category/";
     
     self.parsedObject = [[NSDictionary alloc] init];
     self.parsedObject = [defaults objectForKey:@"allCat"];
@@ -77,7 +77,10 @@
         data.cId = temp[@"Id"];
         data.text = temp[@"Name"];
         data.image = temp[@"ImageId"];
-        [arrCat addObject:data];
+        if([data.text isEqual:@"სახელმწიფო"])
+            [arrCat insertObject:data atIndex:0];
+        else
+            [arrCat addObject:data];
     }
     
     [table reloadData];
@@ -261,7 +264,8 @@
     SideCellData *data = [arrCat objectAtIndex:indexPath.row];
     if([data.text isEqualToString:@"სახელმწიფო"]){
         [cell.switchDays isOn];
-        [cell.switchDays setUserInteractionEnabled:NO];
+      //  [cell.switchDays setUserInteractionEnabled:NO];
+        cell.switchDays.enabled = NO;
     }
     else{
         BOOL isOn = NO;
@@ -278,9 +282,11 @@
         cell.switchDays.tag = [data.cId intValue];
         [cell.switchDays addTarget:self action:@selector(changeSwitch:) forControlEvents:UIControlEventValueChanged];
     }
-        
+    
+    UIImage *image = [UIImage imageWithData:[NSData dataWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@%@.png", self.startUrl, data.image]]]];
+    [cell.image setImage:image];
     [cell setFormats];
-    [cell setCellData:data];
+    [cell.text setText:data.text];
     return cell;
 }
 

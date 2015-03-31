@@ -1392,7 +1392,7 @@ const int FrontViewPositionNone = 0xff;
     UINavigationController *nav = (UINavigationController*)self.frontViewController;
     BaseViewController *baseViewController = (BaseViewController*)nav.topViewController;
     
-    if (newPosition == 3)
+    if (newPosition == 3 || newPosition == FrontViewPositionRight)
     {
    //     if([baseViewController isKindOfClass:[MainViewController class]])
    //         _panGestureRecognizer.enabled = YES;

@@ -11,6 +11,10 @@
 @interface AppSettings : NSObject
 
 @property NSMutableArray *array;
+@property NSString * year;
+@property NSMutableArray *arrDay;
+@property NSMutableArray *arrMonth;
+@property NSMutableArray *arrCat;
 
 +(AppSettings *)sharedInstance;
 

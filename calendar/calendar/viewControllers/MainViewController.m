@@ -16,6 +16,7 @@
 #import "AppDelegate.h"
 #import "Reachability.h"
 #import "AppSettings.h"
+#import "SideCellData.h"
 
 @interface MainViewController ()
 
@@ -26,7 +27,49 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
  
-
+    UIImage *statusImage = [UIImage imageNamed:@"Untitled-20000.png"];
+    [self.loader setImage:statusImage];
+    
+    
+    //Add more images which will be used for the animation
+    self.loader.animationImages = [NSArray arrayWithObjects:
+                                         [UIImage imageNamed:@"Untitled-20000.png"],
+                                         [UIImage imageNamed:@"Untitled-20001.png"],
+                                         [UIImage imageNamed:@"Untitled-20002.png"],
+                                         [UIImage imageNamed:@"Untitled-20003.png"],
+                                         [UIImage imageNamed:@"Untitled-20004.png"],
+                                         [UIImage imageNamed:@"Untitled-20005.png"],
+                                         [UIImage imageNamed:@"Untitled-20006.png"],
+                                         [UIImage imageNamed:@"Untitled-20007.png"],
+                                   [UIImage imageNamed:@"Untitled-20008.png"],
+                                   [UIImage imageNamed:@"Untitled-20009.png"],
+                                   [UIImage imageNamed:@"Untitled-20010.png"],
+                                   [UIImage imageNamed:@"Untitled-20011.png"],
+                                   [UIImage imageNamed:@"Untitled-20012.png"],
+                                   [UIImage imageNamed:@"Untitled-20013.png"],
+                                   [UIImage imageNamed:@"Untitled-20014.png"],
+                                   [UIImage imageNamed:@"Untitled-20015.png"],
+                                   [UIImage imageNamed:@"Untitled-20016.png"],
+                                   [UIImage imageNamed:@"Untitled-20017.png"],
+                                   [UIImage imageNamed:@"Untitled-20018.png"],
+                                   [UIImage imageNamed:@"Untitled-20019.png"],
+                                   [UIImage imageNamed:@"Untitled-20020.png"],
+                                   [UIImage imageNamed:@"Untitled-20021.png"],
+                                   [UIImage imageNamed:@"Untitled-20022.png"],
+                                   [UIImage imageNamed:@"Untitled-20023.png"],
+                                   [UIImage imageNamed:@"Untitled-20024.png"],
+                                   [UIImage imageNamed:@"Untitled-20025.png"],
+                                   [UIImage imageNamed:@"Untitled-20026.png"],
+                                   [UIImage imageNamed:@"Untitled-20027.png"],
+                                   [UIImage imageNamed:@"Untitled-20028.png"],
+                                   [UIImage imageNamed:@"Untitled-20029.png"],
+                                   
+                                         nil];
+    
+    
+    //Start the animation
+    [self.loader startAnimating];
+    
     
     [self.defaultButton setHidden:YES];
     [self.defaultText setHidden:YES];
@@ -43,6 +86,9 @@
     [[UIApplication sharedApplication] setStatusBarStyle:UIStatusBarStyleLightContent];
     
     self.startUrl = @"http://nextep.ge/content/calendar/event/648x370/";
+    
+    NSString * firstUrlString = @"http://nextep.ge/calendar/getVersion";
+    NSURL * firstUrl = [[NSURL alloc] initWithString:firstUrlString];
     
     NSString *urlAsString = @"http://nextep.ge/calendar/getDays";
     NSURL *url = [[NSURL alloc] initWithString:urlAsString];
@@ -64,36 +110,70 @@
     arrMonth = [[NSMutableArray alloc] init];
     showCategories = [[NSMutableArray alloc] init];
     monthsNum = [[NSMutableDictionary alloc] initWithCapacity:12];
+    AppSettings *appSettings = [AppSettings sharedInstance];
+    appSettings.arrDay = [[NSMutableArray alloc] init];
+    appSettings.arrMonth = [[NSMutableArray alloc] init];
+    appSettings.arrCat = [[NSMutableArray alloc] init];
     
     
     [self addCategories];
     
+    isOld = NO;
     
     self.parsedObject = [[NSDictionary alloc] init];
     Reachability *networkReachability = [Reachability reachabilityForInternetConnection];
     NetworkStatus networkStatus = [networkReachability currentReachabilityStatus];
-    if (networkStatus != NotReachable) {
-
     
-        [AppDelegate downloadDataFromURL:url withCompletionHandler:^(NSData *data) {
-            if(data != nil){
-                self.allDaysData = data;
-                [self parseJson:data];
-                [self parseData];
-            }
+    if (networkStatus != NotReachable) {
+        NSData * dataUrl = [NSData dataWithContentsOfURL:firstUrl];
+        NSError *localError = nil;
+        NSDictionary * temp =[NSJSONSerialization JSONObjectWithData:dataUrl options:0 error:&localError];
+        NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+        NSString *version;
+        if([defaults objectForKey:@"version"] != nil)
+            version = [[defaults objectForKey:@"version"] mutableCopy];
         
-        }];
-        [AppDelegate downloadDataFromURL:urlCat withCompletionHandler:^(NSData *data) {
-            if(data != nil){
-                [self parseJsonCat:data];
+        if(temp != nil){
+            NSString * ver = temp[@"Data"];
+            if([version isEqual:ver])
+                isOld = YES;
+            else{
+                [defaults setObject:ver forKey:@"version"];
+
             }
-            
-        }];
+        }
+
+        if(!isOld){
+            [AppDelegate downloadDataFromURL:url withCompletionHandler:^(NSData *data) {
+                if(data != nil){
+                    self.allDaysData = data;
+                    [self parseJson:data];
+                    [self parseData];
+                }
+        
+            }];
+            [AppDelegate downloadDataFromURL:urlCat withCompletionHandler:^(NSData *data) {
+                if(data != nil){
+                    [self parseJsonCat:data];
+                    [self parseDataCat];
+                }
+            }];
+        }
+        else{
+            NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
+            self.parsedObject = [defaults objectForKey:@"allData"];
+            [self parseData];
+            self.parsedObjectCat = [defaults objectForKey:@"allCat"];
+            [self parseDataCat];
+
+        }
     }
     else{
         NSUserDefaults *defaults = [NSUserDefaults standardUserDefaults];
         self.parsedObject = [defaults objectForKey:@"allData"];
         [self parseData];
+        self.parsedObjectCat = [defaults objectForKey:@"allCat"];
+        [self parseDataCat];
     }
     
     self.dayTitle.numberOfLines = 3;
@@ -138,7 +218,8 @@
 }
 
 - (void)viewWillAppear:(BOOL)animated{
-    
+    [self.view addGestureRecognizer:self.revealViewController.panGestureRecognizer];
+    self.revealViewController.panGestureRecognizer.enabled = YES;
 }
 
 - (void) receiveTestNotification:(NSNotification *) notification
@@ -152,7 +233,6 @@
         [self addCategories];
         [self parseData];
         [appSettings.array removeAllObjects];
-        [self createNotifications];
     }
     if ([[notification name] isEqualToString:@"changeNotification"]){
         NSString * notificationOn;
@@ -200,10 +280,28 @@
     [defaults setObject:self.parsedObject forKey:@"allData"];
     
 }
+- (void)parseDataCat{
+    AppSettings *appSettings = [AppSettings sharedInstance];
+    NSMutableArray * arCat = [[NSMutableArray alloc] init];
+    NSArray * categories = self.parsedObjectCat[@"Data"];
+    for(int i = 0; i < [categories count]; i++){
+        NSDictionary * temp = [categories objectAtIndex:i];
+        SideCellData * data = [SideCellData alloc];
+        data.cId = temp[@"Id"];
+        data.text = temp[@"Name"];
+        data.image = temp[@"ImageId"];
+        [arCat addObject:data];
+    }
+    appSettings.arrCat = arCat;
+}
+
 
 - (void)parseData{
     int monthIndex = 1;
     int numInMonth = 0;
+    AppSettings *appSettings = [AppSettings sharedInstance];
+    appSettings.year = [[NSString alloc] init];
+    appSettings.year = [self.parsedObject[@"Data"][@"Year"] stringValue];
     NSArray * days = self.parsedObject[@"Data"][@"Days"];
     days = [days sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
         int first = [((NSDictionary *)a)[@"Month"] intValue];
@@ -234,11 +332,22 @@
             eventData.image = event[@"Image"];
             eventData.name = event[@"Name"];
             eventData.eventDescription = event[@"Description"];
+            eventData.priority = [event[@"O"] stringValue];
             
             if([showCategories containsObject:eventData.catId] || [eventData.catId isEqualToString:@"3"])
                 [dayData.events addObject:eventData];
         }
         if([dayData.events count] > 0){
+            dayData.events = (NSMutableArray *)[dayData.events sortedArrayUsingComparator:^NSComparisonResult(id a, id b) {
+                int first = [((EventData *)a).priority intValue];
+                int second = [((EventData *)b).priority intValue];
+                if(first < second)
+                    return false;
+                else
+                    return true;
+            }];
+
+            
             if(monthIndex == numMonth){
                 numInMonth++;
                 
@@ -255,10 +364,11 @@
             }
             
             
+            
             dayData.month = [self changeIntToMonth:numMonth];
             dayData.isWork = [day[@"IsWork"] boolValue];
             
-            NSString *dateString = [NSString stringWithFormat:@"%@-%@-2015", numDay, [NSString stringWithFormat:@"%d",numMonth]];
+            NSString *dateString = [NSString stringWithFormat:@"%@-%@-%@", numDay, [NSString stringWithFormat:@"%d",numMonth], appSettings.year];
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"dd-MM-yyyy"];
             NSDate *dateFromString = [[NSDate alloc] init];
@@ -281,6 +391,10 @@
 
         [arrMonth insertObject:[NSString stringWithFormat:@"%d",numInMonth] atIndex:(monthIndex - 1)];
     }
+    
+    appSettings.arrMonth = arrMonth;
+    appSettings.arrDay = arrDays;
+    
     
     notEmpty = [[NSMutableArray alloc] init];
     sectionNumber = 0;
@@ -329,7 +443,7 @@
     int index = 0;
     int section = 0;
     int j = 0;
-    if([arrMonth count] > months){
+    if([arrMonth count] > (months - 1)){
         int numInMonth = [[arrMonth objectAtIndex:(months - 1)] intValue];
         
         
@@ -420,7 +534,7 @@
     //   int index = [self getNumberOfObjects:(((int)[comps month]) - 1)] + (int)[comps day] - 1;
     
     CellData * current = [CellData alloc];
-    if([arrMonth count] > months){
+    if([arrMonth count] > (months - 1)){
         int numInMonth = [[arrMonth objectAtIndex:(months - 1)] intValue];
         if(numInMonth != 0){
             int index = 0;
@@ -559,7 +673,19 @@
 
 -(void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.loader stopAnimating];
+            [self.loader setHidden:YES];
+         //   [self.activityIndicator stopAnimating];
+            
+        });
+        
+    
+
 }
+
+
 
 -(NSString *)changeIntToMonth:(int)num{
     if(num == 1)
@@ -694,15 +820,9 @@
     {
         DayViewController * controller = [segue destinationViewController];
         controller.currentData = self.currentData;
-        controller.allDays = arrDays;
-        controller.allMonth = arrMonth;
+        
     }
-    else if ([[segue identifier] isEqualToString:@"view_cal"])
-    {
-        CalendarViewController * calendarController = [segue destinationViewController];
-        calendarController.allDays = arrDays;
-        calendarController.allMonth = arrMonth;
-    }
+   
 
 }
 

@@ -18,6 +18,7 @@
 @property (weak, nonatomic) IBOutlet UIButton *sidebarButton;
 @property (weak, nonatomic) IBOutlet UITableView *table;
 @property (nonatomic, readwrite, retain) DayData * currentData;
+@property (weak, nonatomic) IBOutlet UIButton *calendar;
 
 -(void)enableViewContent:(BOOL)enable;
 

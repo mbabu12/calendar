@@ -8,6 +8,9 @@
 #import "JTCalendarDayView.h"
 #import <QuartzCore/QuartzCore.h>
 #import "JTCircleView.h"
+#import "AppSettings.h"
+#import "CellData.h"
+#import "EventData.h"
 
 @interface JTCalendarDayView (){
     JTCircleView *circleView;
@@ -29,6 +32,7 @@ static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 - (instancetype)initWithFrame:(CGRect)frame
 {
     self = [super initWithFrame:frame];
+    
     if(!self){
         return nil;
     }
@@ -65,6 +69,7 @@ static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     isWeekend = NO;
     self.isOtherMonth = NO;
     
+    
     {
         circleView = [JTCircleView new];
         [self addSubview:circleView];
@@ -93,6 +98,7 @@ static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     }
     self.layer.borderColor = [UIColor colorWithRed:226.0/255.0 green:226.0/255.0 blue:226.0/255.0 alpha:1].CGColor;
     self.layer.borderWidth = 0.45f;
+    
 }
 
 - (void)layoutSubviews
@@ -128,6 +134,7 @@ static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 - (void)setDate:(NSDate *)date
 {
     static NSDateFormatter *dateFormatter;
+    
     if(!dateFormatter){
         dateFormatter = [NSDateFormatter new];
         dateFormatter.timeZone = self.calendarManager.calendarAppearance.calendar.timeZone;
@@ -145,6 +152,80 @@ static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
     
     cacheIsToday = -1;
     cacheCurrentDateText = nil;
+    
+    [self setEvents:date];
+}
+
+- (UIColor *)getColor:(NSString *)cId{
+    if([cId isEqual:@"1"])
+        return [UIColor colorWithRed:222.0/255.0 green:58.0/255.0 blue:149.0/255.0 alpha:1.0];
+    else if([cId isEqual:@"3"])
+        
+        return [UIColor colorWithRed:255.0/255.0 green:136.0/255.0 blue:136.0/255.0 alpha:1.0];
+    else if([cId isEqual:@"6"])
+        return [UIColor colorWithRed:30.0/255.0 green:47.0/255.0 blue:144.0/255.0 alpha:1.0];
+    else if([cId isEqual:@"102"])
+        return [UIColor colorWithRed:0.0/255.0 green:132.0/255.0 blue:255.0/255.0 alpha:1.0];
+    
+    
+    return nil;
+}
+
+- (void)setEvents:(NSDate *)curDate{
+    AppSettings *appSettings = [AppSettings sharedInstance];
+    NSDateComponents *components = [[NSCalendar currentCalendar] components:NSCalendarUnitDay | NSCalendarUnitMonth | NSCalendarUnitYear fromDate:curDate];
+    CellData * cur = [CellData alloc];
+    int months = [components month];
+    int day = [components day];
+    if([appSettings.arrMonth count] > (months - 1)){
+        int numInMonth = [[appSettings.arrMonth objectAtIndex:(months - 1)] intValue];
+        if(numInMonth != 0){
+            int index = 0;
+            for(int i = 0; i < (months - 1); i++){
+                index += [[appSettings.arrMonth objectAtIndex:i] intValue];
+            }
+            int j = index - 1;
+            if(j < 0)
+                j = 0;
+            for(j; j < (index + numInMonth); j++){
+                if([appSettings.arrDay count] > j){
+                    CellData * temp = [appSettings.arrDay objectAtIndex:j];
+                    if([temp.number intValue] == day){
+                        cur = temp;
+                        break;
+                    }
+                }
+            }
+        }
+    
+    }
+    
+    
+    for (UIView *view in [self subviews])
+    {
+        if([view tag] == 4)
+            [view removeFromSuperview];
+    }
+    
+    NSMutableArray * arr = [[NSMutableArray alloc] init];
+    for(int i = 0; i < [cur.events count]; i++){
+        EventData * temp = [cur.events objectAtIndex:i];
+        if(![arr containsObject:temp.catId])
+            [arr addObject:temp.catId];
+    }
+    
+    int width = self.frame.size.width;
+    for(int i = 0; i < [arr count]; i++){
+        NSString * cId = [arr objectAtIndex:i];
+        UIView * circleViews = [[UIView alloc] initWithFrame:CGRectMake(width - 10 - 12*i, 0, 8, 8)];
+        circleViews.layer.cornerRadius = 4;
+        circleViews.backgroundColor = [self getColor:cId];
+        circleViews.tag = 4;
+        [self addSubview:circleViews];
+        
+    }
+    [arr removeAllObjects];
+    
 }
 
 - (void)didTouch
@@ -323,7 +404,7 @@ static NSString *kJTCalendarDaySelected = @"kJTCalendarDaySelected";
 {
     textLabel.textAlignment = NSTextAlignmentCenter;
     textLabel.font = self.calendarManager.calendarAppearance.dayTextFont;
-    
+    [self setEvents:self.date];
     [self configureConstraintsForSubviews];
     [self setSelected:isSelected animated:NO];
 }

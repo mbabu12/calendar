@@ -205,11 +205,19 @@
 
 - (void)addNotifications{
     AppSettings *appSettings = [AppSettings sharedInstance];
+    NSDate *now = [NSDate date];
+    NSCalendar *calendar = [[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar];
+    NSDateComponents *components = [calendar components:NSCalendarUnitYear|NSCalendarUnitMonth|NSCalendarUnitDay fromDate:now];
+    int year = [components year];
+    NSString * months = [NSString stringWithFormat:@"%d",[components month]];
+    
     if(appSettings.array != nil){
         for(int i = 0; i < [appSettings.array count]; i++){
             CellData * temp = [appSettings.array objectAtIndex:i];
-            
-            NSString *dateString = [NSString stringWithFormat:@"%@-%@-2015 12:00", temp.number, [self changeMonth:temp.month]];
+            if([[self changeMonth:temp.month ] intValue] < [months intValue])
+                year++;
+            months = [self changeMonth:temp.month];
+            NSString *dateString = [NSString stringWithFormat:@"%@-%@-%d 12:00", temp.number, [self changeMonth:temp.month], year];
             NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
             [dateFormatter setDateFormat:@"dd-MM-yyyy HH:mm"];
             NSDate *dateFromString = [[NSDate alloc] init];
